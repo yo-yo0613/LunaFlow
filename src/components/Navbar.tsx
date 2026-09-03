@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Moon, Sun, Heart, Sparkles, Calendar, Users, Share2, Download, User as UserIcon } from 'lucide-react';
+import { Moon, Sun, Sparkles, Calendar, Users, Share2, Download, User as UserIcon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 
@@ -12,7 +12,7 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onOpenShare, onOpenInstall, onOpenAuth }) => {
   const { theme, toggleTheme } = useTheme();
-  const { isPartnerMode, setIsPartnerMode, cycleInfo, profile, user } = useAuth();
+  const { cycleInfo, profile, user } = useAuth();
   const location = useLocation();
 
   const navLinks = [
@@ -46,7 +46,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenShare, onOpenInstall, onOp
           {/* Real-time Status Capsule */}
           <div className="hidden md:flex items-center px-3 py-1 rounded-full text-xs font-medium bg-pink-50 dark:bg-pink-950/40 text-pink-600 dark:text-pink-300 border border-pink-200 dark:border-pink-900/60 animate-pulse-slow">
             <span className="w-2 h-2 rounded-full bg-pink-500 mr-2 animate-ping" />
-            {isPartnerMode ? '守護者視角' : '個人模式'} · {cycleInfo.batteryLabel}
+            {profile.display_name} · {cycleInfo.batteryLabel}
           </div>
         </div>
 
@@ -74,28 +74,15 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenShare, onOpenInstall, onOp
 
         {/* Action Buttons */}
         <div className="flex items-center space-x-2">
-          
-          {/* Partner Mode Toggle Button */}
-          <button
-            onClick={() => setIsPartnerMode(!isPartnerMode)}
-            title={isPartnerMode ? '切換為女生個人模式' : '切換為暖男守護雷達視角'}
-            className={`flex items-center space-x-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold transition-all duration-200 border ${
-              isPartnerMode
-                ? 'bg-pink-500 text-white border-pink-400 shadow-md shadow-pink-500/25'
-                : 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 border-zinc-200 dark:border-zinc-700 hover:border-pink-300 dark:hover:border-pink-600'
-            }`}
-          >
-            <Heart className={`w-3.5 h-3.5 ${isPartnerMode ? 'fill-current' : ''}`} />
-            <span className="hidden sm:inline">{isPartnerMode ? '暖男守護中' : '伴侶視角'}</span>
-          </button>
 
           {/* Social Share & QR Button */}
           <button
             onClick={onOpenShare}
-            className="p-2 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors"
+            className="p-2 rounded-xl text-zinc-600 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-800 transition-colors flex items-center space-x-1 text-xs font-semibold"
             title="分享雷達 / 社群預覽卡片"
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-4 h-4 text-pink-500" />
+            <span className="hidden sm:inline">傳給伴侶</span>
           </button>
 
           {/* PWA Install Button */}
