@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Battery, Moon, Sparkles, HeartHandshake, Flame, Calendar } from 'lucide-react';
 import { CyclePhaseInfo } from '../../types';
-import { getPredictedNextPeriodDate } from '../../lib/cycleCalculator';
+import { getPredictedNextPeriodDate, getPhaseLabel } from '../../lib/cycleCalculator';
 import { useAuth } from '../../context/AuthContext';
 import { formatDisplayDate } from '../../lib/dateUtils';
 
@@ -11,7 +11,7 @@ interface CycleRadarCardProps {
 }
 
 export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => {
-  const { profile, isPartnerMode } = useAuth();
+  const { profile } = useAuth();
   const nextPeriodDate = getPredictedNextPeriodDate(profile.last_period_start, profile.average_cycle_length);
 
   // SVG 圓環參數
@@ -33,8 +33,17 @@ export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => 
     <div className="glass-card bento-hover rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-between relative overflow-hidden group">
       
       {/* Background Breathing Ambient Glow */}
-      <div 
-        className="absolute -top-12 -left-12 w-56 h-56 rounded-full blur-3xl opacity-20 pointer-events-none transition-all duration-700"
+      <motion.div 
+        animate={{
+          scale: [1, 1.15, 1],
+          opacity: [0.18, 0.35, 0.18],
+        }}
+        transition={{
+          duration: 4,
+          repeat: Infinity,
+          ease: "easeInOut"
+        }}
+        className="absolute -top-12 -left-12 w-64 h-64 rounded-full blur-3xl pointer-events-none"
         style={{ backgroundColor: cycleInfo.themeColor }}
       />
 
@@ -46,7 +55,7 @@ export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => 
             style={{ backgroundColor: cycleInfo.themeColor }}
           />
           <span className="text-xs font-semibold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-            {isPartnerMode ? '守護雷達' : '月見週期'}
+            月見身心雷達
           </span>
         </div>
 
@@ -85,7 +94,7 @@ export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => 
             strokeLinecap="round"
             fill="transparent"
             style={{
-              filter: `drop-shadow(0 0 10px ${cycleInfo.themeColor}88)`
+              filter: `drop-shadow(0 0 12px ${cycleInfo.themeColor})`
             }}
           />
         </svg>
@@ -94,8 +103,14 @@ export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => 
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4">
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ delay: 0.2 }}
+            animate={{ 
+              scale: [1, 1.08, 1],
+              opacity: 1
+            }}
+            transition={{ 
+              scale: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+              opacity: { duration: 0.3 }
+            }}
             className="w-12 h-12 rounded-2xl flex items-center justify-center mb-1 shadow-inner"
             style={{ backgroundColor: `${cycleInfo.themeColor}22`, color: cycleInfo.themeColor }}
           >
@@ -105,8 +120,8 @@ export const CycleRadarCard: React.FC<CycleRadarCardProps> = ({ cycleInfo }) => 
           <span className="text-3xl sm:text-4xl font-black tracking-tight text-zinc-900 dark:text-white">
             Day {cycleInfo.cycleDay}
           </span>
-          <span className="text-xs font-semibold text-pink-500 mt-0.5">
-            {cycleInfo.phaseName.split(' ')[1]}
+          <span className="text-xs font-bold text-pink-500 mt-0.5">
+            {getPhaseLabel(cycleInfo.phase)}
           </span>
           <span className="text-[11px] text-zinc-400 dark:text-zinc-500 mt-1">
             週期進度 {Math.round(progressRatio * 100)}%

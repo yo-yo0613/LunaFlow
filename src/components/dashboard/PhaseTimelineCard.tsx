@@ -1,6 +1,6 @@
-import React from 'react';
 import { CyclePhaseInfo } from '../../types';
 import { useAuth } from '../../context/AuthContext';
+import { getPhaseLabel } from '../../lib/cycleCalculator';
 
 interface PhaseTimelineCardProps {
   cycleInfo: CyclePhaseInfo;
@@ -49,8 +49,8 @@ export const PhaseTimelineCard: React.FC<PhaseTimelineCardProps> = ({ cycleInfo 
         <h3 className="text-sm font-bold text-zinc-900 dark:text-white">
           四階段週期身心節奏
         </h3>
-        <span className="text-xs text-pink-500 font-semibold">
-          當前處於：{cycleInfo.phaseName}
+        <span className="text-xs text-pink-500 font-bold">
+          當前處於：{getPhaseLabel(cycleInfo.phase)}
         </span>
       </div>
 
