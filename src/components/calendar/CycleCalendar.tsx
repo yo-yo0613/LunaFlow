@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { ChevronLeft, ChevronRight, Calendar as CalendarIcon, X, Plus } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { toLocalYYYYMMDD, formatDisplayDate } from '../../lib/dateUtils';
-import { calculateCyclePhase } from '../../lib/cycleCalculator';
+import { calculateCyclePhase, getPhaseLabel } from '../../lib/cycleCalculator';
 import { FlowLevel } from '../../types';
 
 export const CycleCalendar: React.FC = () => {
@@ -210,12 +210,12 @@ export const CycleCalendar: React.FC = () => {
                 </div>
 
                 {/* Day Phase Mini Tag */}
-                <div className="hidden sm:flex items-center justify-between text-[10px] text-zinc-400">
+                <div className="hidden sm:flex items-center justify-between text-[10px] font-medium text-zinc-400">
                   <span className="truncate">
-                    {dayLog?.is_period_day ? '🔴 經期' : dayPhase.phaseName.split(' ')[1]}
+                    {getPhaseLabel(dayPhase.phase, dayLog?.is_period_day)}
                   </span>
                   {dayLog && dayLog.energy_level && (
-                    <span className="text-pink-500 font-bold">⚡{dayLog.energy_level}</span>
+                    <span className="text-pink-500 font-bold ml-1">⚡{dayLog.energy_level}</span>
                   )}
                 </div>
               </motion.button>

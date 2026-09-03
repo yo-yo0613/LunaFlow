@@ -155,6 +155,25 @@ export function calculateCyclePhase(
 }
 
 /**
+ * 取得簡潔易懂的繁體中文階段標籤 (附圖標)
+ */
+export function getPhaseLabel(phase: PhaseType, isPeriodDay: boolean = false): string {
+  if (isPeriodDay) return '🔴 經期中';
+  switch (phase) {
+    case 'recharge':
+      return '🌸 舒緩修復期';
+    case 'peak_energy':
+      return '⚡ 活力濾泡期';
+    case 'golden_window':
+      return '🌕 排卵黃金期';
+    case 'vulnerable':
+      return '🌙 經前敏感期';
+    default:
+      return '';
+  }
+}
+
+/**
  * 計算多個月經期歷史的滑動平均值 (Rolling Average)
  */
 export function calculateRollingAverage(cycleLengths: number[]): number {
@@ -171,3 +190,4 @@ export function calculateRollingAverage(cycleLengths: number[]): number {
 export function getPredictedNextPeriodDate(lastPeriodStart: string, cycleLength: number = 28): string {
   return addDaysLocal(lastPeriodStart, cycleLength);
 }
+
